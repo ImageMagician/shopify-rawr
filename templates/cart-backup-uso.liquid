@@ -1,0 +1,122 @@
+
+
+<div class="container my-5">
+	
+	
+	<div class="row mb-3">
+		<div class="col">
+			<h1>Shopping Cart</h1>
+		</div>
+	</div>
+	
+	
+	{% if cart.item_count > 0 %}
+		
+		<form action="/cart" method="post" novalidate>
+			
+			<div class="row mb-3">
+				<div class="col-2"></div>
+				<div class="col-4"></div>
+				<div class="col-2 text-center"><h5>Price</h5></div>
+				<div class="col-2 text-center"><h5>Quantity</h5></div>
+				<div class="col-2 text-center"><h5>Total</h5></div>
+			</div>
+			
+			<!-- Items -->
+			{% for item in cart.items %}
+		
+				{% render 'theme-cart-item', item: item, row_number: forloop.index %}
+		
+			{% endfor %}
+			
+			
+			
+			<div class="row mb-3">
+				<div class="col-6">
+					
+				</div>
+				<div class="col-6">
+					<hr>
+				</div>
+			</div>
+			
+			
+			
+			<div class="row mb-5">
+				<div class="col-6">
+					
+				</div>
+				<div class="col-6">
+					
+					<div class="row">
+						<div class="col-4">
+						</div>
+						<div class="col-4 text-center">
+							<h6>Subtotal</h6>
+						</div>
+						<div class="col-4 text-center">
+
+							<span class="money h3 cart__subtotal" data-cart-total>{{ cart.total_price | money }}</span>
+							
+							
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-6">
+								
+							</div>
+						<div class="col-6">
+							
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+			
+			
+			
+			<div class="row">
+				<div class="col-6">
+					
+					<div class="">
+						<button name="update" class="btn btn-sm btn-secondary" type="submit">UPDATE CART</button>
+					</div>
+					
+				</div>
+				<div class="col-6">
+					
+					<div class="d-grid gap-2">
+						<button name="checkout" class="btn btn-lg btn-warning" type="submit">CHECKOUT <i class="bi bi-cart-fill"></i></button>
+					</div>
+					
+					<div class="d-grid gap-2 text-center p-2">
+						<small>Shipping, taxes, and discounts are calculated during checkout.</small>
+					</div>
+					
+				</div>
+			</div>
+			
+			
+			
+		</form>
+		
+	{% else %}
+		
+		{% render 'theme-cart-empty' %}
+		
+	{% endif %}
+	
+	
+	
+</div>
+  
+  
+
+  
+  
+  
+  
+  
+  

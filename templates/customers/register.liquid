@@ -1,0 +1,79 @@
+<!-- /templates/customers/register.liquid -->
+<div class="container my-5">
+	
+	<div class="row">
+		<div class="col-md-12">
+			
+			<h1>Customer Account Registration</h1>
+			
+		</div>
+	</div>
+	
+
+
+	<div class="row">
+		<div class="col-md-8">
+			
+			
+			
+		</div>
+		<div class="col-md-4">
+		
+		
+			{% form 'create_customer' %}
+			
+			{{ form.errors | default_errors }}
+			
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div class="form-floating">
+							<input type="text" class="form-control" value="" name="customer[first_name]" size="30" autofocus />
+							<label for="first_name">First Name</label>
+							
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div class="form-floating">
+							<input type="text" class="form-control" value="" name="customer[last_name]" size="30" />
+							<label for="first_name">Last Name</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-12 mb-2">
+						<div class="form-floating">
+							<input type="email" class="form-control" value="" name="customer[email]" size="30" />
+							<label for="email">Email Address</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-12 mb-3">
+						<div class="form-floating">
+							<input type="password" class="form-control" value="" name="customer[password]" size="30" />
+							<label for="password">Password</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-12 d-grid">
+						<input type="submit" class="btn btn-warning my-3" value="Register" />
+					</div>
+				</div>
+			
+			{% endform %}
+			
+	
+		</div>
+		
+		
+		
+	</div>
+
+</div>

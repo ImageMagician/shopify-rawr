@@ -1,0 +1,80 @@
+<!-- /templates/customers/order.liquid -->
+<div class="container my-5">
+	
+	<div class="row mb-3">
+		<div class="col-12">
+			
+			<h1>Order </h1>
+			
+		</div>
+	</div>
+	
+	
+	
+	<div class="row mb-4">
+		<div class="col-md-6">
+			
+			<strong>Payment Status:</strong> <span class="status_{{ order.financial_status }}">{{ order.financial_status }}</span>
+			
+		</div>
+		<div class="col-md-6">
+			
+			<strong>Fulfillment Status:</strong>
+			<span class="status_{{ order.fulfillment_status }}">{{ order.fulfillment_status }}</span>
+			
+		</div>
+	</div>
+	
+	
+	
+	<div class="row mb-4">
+		<div class="col-md-6">
+			
+			<h3>Billing Address</h3>
+			
+			<div>{{ order.billing_address.name }}</div>
+			<div>{{ order.billing_address.company }}</div>
+			<div>{{ order.billing_address.street }}</div>
+			<div>{{ order.billing_address.city }}, {{ order.billing_address.province }} {{ order.billing_address.zip }}</div>
+			<div>{{ order.billing_address.country }}</div>
+			<div>{{ order.billing_address.phone }}</div>
+			
+		</div>
+		<div class="col-md-6">
+			
+			<h3>Shipping Address</h3>
+			
+			<div>{{ order.shipping_address.name }}</div>
+			<div>{{ order.shipping_address.company }}</div>
+			<div>{{ order.shipping_address.street }}</div>
+			<div>{{ order.shipping_address.city }}, {{ order.shipping_address.province }} {{ order.shipping_address.zip }}</div>
+			<div>{{ order.shipping_address.country }}</div>
+			<div>{{ order.shipping_address.phone }}</div>
+			
+		</div>
+	</div>
+	
+
+	<div class="row mb-3">
+		<div class="col-12">
+			
+			<div class="row">
+				<h3>Order Items</h3>
+			</div>
+			
+			
+			{% for line_item in order.line_items %}
+			<div class="row">
+				<div class="col-4">{{ line_item.title | link_to: line_item.product.url }}</div>
+				<div class="col-2">{{ line_item.sku }}</div>
+				<div class="col-2">{{ line_item.original_price | money }}</div>
+				<div class="col-2">{{ line_item.quantity }}</div>
+				<div class="col-2">{{ line_item.line_price | money }}</div>
+			</div>
+			{% endfor %}
+			
+		</div>
+	</div>
+
+
+</div>

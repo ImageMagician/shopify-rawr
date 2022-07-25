@@ -1,0 +1,49 @@
+
+{% layout 'theme.shogun.landing' %}
+
+
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+
+{% render 'shogun-products', content: collection %}
+
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+
+	{% comment %}================================================================{% endcomment %}
+	{% comment %}  SHOGUN  														 {% endcomment %}
+	{% comment %}================================================================{% endcomment %}
+	{% if collection.metafields.shogun.above != blank %}
+	
+	
+		{{collection.metafields.shogun.above}}
+	
+	
+	{% comment %}================================================================{% endcomment %}
+	{% comment %}  DEFAULT  														 {% endcomment %}
+	{% comment %}================================================================{% endcomment %}
+	{% else %}
+	
+		{% comment %}
+		<div class="container">
+			<h1>{{ collection.title }}</h1>
+			
+			{% if collection.description != blank %}
+				<div>
+				{{ collection.description }}
+				</div>
+			{% endif %}
+		</div>
+		{% endcomment %}
+	
+	{% endif %}
+
+
+{% if collection.metafields.shogun.below != blank %}
+
+	{{collection.metafields.shogun.below}}
+
+{% endif %}

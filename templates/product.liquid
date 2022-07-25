@@ -1,0 +1,272 @@
+{% assign debug = false %}
+
+{% render 'shogun-products', content: product %}
+{{product.metafields.shogun.above}}
+
+<div class="container my-5">
+
+
+	{% if debug %}
+		<div class="row mb-5 p-5 bg-dark">
+			<div class="col-6">
+				<h1 class="text-center text-danger">DEBUG ENABLED</h1>
+<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{product.id}}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display: block;"></span>
+<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{product.id}}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display: block;"></span>
+			</div>
+			<div class="col-6 text-white">
+					<h6 class="my-4">Available: {% if product.available %}In Stock{% else %}Out of Stock{% endif %}</h6>
+					<h6>Variants</h6>
+					{% if product.has_only_default_variant %}
+							{% for variant in product.variants %}
+								<div>
+								{{ variant.id }} - {{ variant.title }} [ qty {{ variant.inventory_quantity }} ] -- SINGLE VARIANT
+								</div>
+							{% endfor%}
+					{% else %}
+						{% for variant in product.variants %}
+								<div>
+								{{ variant.id }} - {{ variant.title }} [ qty {{ variant.inventory_quantity }} ]
+								</div>
+						{% endfor%}
+					{% endif %}
+					<h6 class="my-4">Selected Variant:  {{ product.selected_or_first_available_variant.id }}</h6>
+			</div>
+		</div>
+	{% endif %}
+	
+	
+	<div class="row gx-5">
+
+		<div class="col-lg-7">
+			
+			<!-- START MAGICZOOMPLUS IMAGES -->{% render 'magiczoomplus' %}<!-- END MAGICZOOMPLUS IMAGES -->
+			
+		</div>
+		<div class="col-lg-5">
+				
+				
+				<h1>{{ product.title }}</h1>
+<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{product.id}}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display: block;"></span>
+				
+				<div class="mb-3">
+					{% unless product.metafields.lionenergy.tagline == blank %}
+						<h5>{{ product.metafields.lionenergy.tagline }}</h5>
+					{% endunless %}
+				</div>
+				
+				
+				<div class="mb-0">
+					<div class="float-end">
+						<a href="#info" id="reviewClick">
+							<span class="stamped-product-reviews-badge stamped-main-badge float-right" data-id="{{ product.id }}" data-product-sku="{{ product.handle }}" data-product-type="{{product.type}}" data-product-title="{{product.title}}" style="display: inline-block;">{{ product.metafields.stamped.badge }}</span>
+						</a>
+					</div>
+					<div>
+						{% render 'product-price', product: product, use_variant: true %}
+					</div>
+				</div>
+				
+				
+				<!--  Quick Bar -->
+				{% render 'theme-product-quickbar', meta:product.metafields.lionenergy %}
+				<!--  END:  Quick Bar -->
+				
+				
+				<div class="row">
+					<div class="col-12">
+						{{ product.description }}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						
+					</div>
+				</div>
+				
+				
+				{% comment %}
+				* * *   FUTURE FEATURE:  PRODUCT UPSELLS (Powered by Rawr Code)   * * *
+				{% endcomment %}
+				{% comment %}
+				{% if product.metafields.lionenergy.upsells %}
+				
+					<div>Upsells</div>
+					<div>Type: {{ product.metafields.lionenergy.upsells.type }}</div>
+					<div>Wash: {{ product.metafields.lionenergy.upsells.value }}</div>
+					
+					{% assign upsells = product.metafields.lionenergy.upsells.value | split: ',' %}
+					<ul class="list-group">
+						
+						{% for upsell in upsells %}
+							{% if all_products[upsell].available == true %}
+							
+								<li class="list-group-item d-flex justify-content-between align-items-center">
+									<div class="d-flex align-items-center">
+										<input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+										<img class="mx-3" src="{{ all_products[upsell] | img_url }}" style="max-height: 50px; max-width: 50px;" />
+										{{ all_products[upsell].title }}
+									</div>
+									<span>
+										<strong>{{ all_products[upsell].price | money }}</strong>
+									</span>
+								</li>
+								
+							{% endif %}
+						{% endfor %}
+						
+					</ul>
+					
+				{% endif %}
+				{% endcomment %}
+				
+				
+				<!--   START:  ADD TO CART FORM   -->
+
+				{% form 'product', product %}
+				  
+					{% if product.has_only_default_variant %}
+						{% for variant in product.variants %}
+							<input type="hidden" id="product-select" name="id" value="{{ variant.id }}">
+						{% endfor%}
+					{% else %}
+						{% for variant in product.variants %}
+          					
+							<a class="btn {% if product.selected_or_first_available_variant.id == variant.id %}btn-outline-warning{% else %}btn-outline-dark{% endif %} m-2" id="variant-option-{{ variant.id }}" name="variant-{{ variant.id }}" href="{{ variant.url }}" role="button"> {{ variant.title }} </a>
+          					
+						{% endfor%}
+					{% endif %}
+				  
+				  	<input type="hidden" id="product-select" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+					<input type="hidden" name="quantity" min="1" value="1">
+					
+					<div class="d-grid gap-2 col-12 my-3 mx-auto">
+						{% if product.available %}
+							<button type="submit" class="btn btn-lg btn-warning"> <i class="bi bi-cart2"></i>  Add to Cart  </button>
+						{% else %}
+							<button type="button" class="btn btn-secondary btn-lg" disabled>Out of Stock</button>
+						{% endif %}
+					</div>
+				  
+				{% endform %}
+          
+		        <!-- END OF CART -->
+
+		</div>
+	</div>
+</div>
+
+<div id="info"></div>
+
+
+{{product.metafields.shogun.below}}
+
+<script>
+  /*
+   * Discount code display
+   */
+  
+  const uri = window.location.href;
+  const urlParams = new URLSearchParams(uri);
+  let dc = '';
+  let dc_price = {{ product.price | divided_by: 100 | decimals: 2 }};
+  let dc_comma = '';
+  
+  function getCookie(cname) {
+    let dc;
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        dc = c.substring(name.length, c.length);
+      }
+    }
+    return dc;
+  }
+  
+  dc = getCookie('discount_code');
+    
+  const price_reg = "{{ product.price | money }}";
+  const prod_id = document.getElementById('product-select').value;
+  const prod_display = document.getElementById('product_price_display');
+  prime15id = [ 29484632113254,
+               31936601391206,
+               33018143809,
+               39469714538598,
+               39641683787878 ];
+  
+  prime10id = [ 30985505177702,
+               39469709525094,
+               39437026164838,
+               39437026459750,
+               32206510194790,
+               31605179351142
+              ];
+  
+  if ( dc != '' && dc != null && dc != undefined ) {
+    if ( dc == '10lionenergy' ) {
+      dc_price = {{ product.price | times: 0.90 | divided_by: 100 | decimals: 2 }};
+    } else if ( dc == 'prime10') {
+      for ( let p10 = 0; p10<prime10id.length; p10++ ) {
+        if ( prod_id == prime10id[p10] ) {
+	      dc_price = {{ product.price | times: 0.90 | divided_by: 100 | decimals: 2 }};
+          break;
+        } else {
+        	dc_price = {{ product.price | divided_by: 100 }};
+      	}
+      }
+    } else if ( dc == 'prime20solar' ) {
+      if ( prod_id == '15559657685094' ) {
+      	dc_price = {{ product.price | times: 0.50 | divided_by: 100 | decimals: 2 }};
+      } else {
+        dc_price = {{ product.price | divided_by: 100 }};
+      }
+    }
+    else
+      if ( dc == 'prime15' ) {
+      for ( let p15 = 0; p15<prime15id.length; p15++ ) {
+        if ( prod_id == prime15id[p15] ) {
+          dc_price = {{ product.price | times: 0.85 | divided_by: 100 | decimals: 2 }};
+          break;
+        }
+        else {
+          dc_price = {{ product.price | divided_by: 100 | decimals: 2 }}
+        }
+      }
+    } 
+
+    else {
+      dc_price = {{ product.price | times: 0.85 | divided_by: 100 | decimals: 2 }};
+    }
+
+    if ( dc_price !== {{ product.price | divided_by: 100  }} ) {
+      dc_comma = '$' + dc_price.toLocaleString("en-US", {minimumFractionDigits: 2} );
+      prod_display.innerHTML = '<span style="text-decoration:line-through; color: #999">' + price_reg + '</span> <strong>' + dc_comma + '</strong>';
+  	}
+  }
+  console.log(dc_price);
+  document.write('<span itemscope itemtype="http://schema.org/Product" class="microdata">');
+    document.write('<meta itemprop="image" content="{{ product.featured_image }}">');
+    document.write('<meta itemprop="name" content="{{ product.title }}">');
+    document.write('<span itemprop="offers" itemscope itemtype="http://schema.org/Offer">');
+      document.write('<meta id="meta_price" itemprop="price" content="' + dc_price + '">');
+      document.write('<meta itemprop="priceCurrency" content="USD">');
+    document.write('</span>');
+  document.write('</span>');
+</script>
+
+<script>
+  
+  let m_price = ( dc !== '' ) ? dc_price : {{ product.price | divided_by: 100 }};
+  console.log(m_price);
+  const meta_price = document.querySelector('#meta_price');
+  console.log(meta_price);
+//  document.querySelector('#meta_price').setAttribute('content', m_price);
+//  console.log(meta_price);
+</script>
+
+<!--Start Stamped.io Auto Installation--><div id="stamped-main-widget" class="stamped-main-widget" data-widget-style="standard" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}" data-widget-language="{{shop.locale}}">{{ product.metafields.stamped.reviews }}</div><!--End Stamped.io Auto Installation-->

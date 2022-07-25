@@ -1,0 +1,78 @@
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+
+{% render 'shogun-products', content: collection %}
+
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+<!-- -------------------------------------------------------- -->
+
+	{% comment %}================================================================{% endcomment %}
+	{% comment %}  SHOGUN  														 {% endcomment %}
+	{% comment %}================================================================{% endcomment %}
+	{% if collection.metafields.shogun.above != blank %}
+	
+	
+		{{collection.metafields.shogun.above}}
+	
+	
+	{% comment %}================================================================{% endcomment %}
+	{% comment %}  DEFAULT  														 {% endcomment %}
+	{% comment %}================================================================{% endcomment %}
+	{% else %}
+	
+		{% comment %}
+		<div class="container">
+			<h1>{{ collection.title }}</h1>
+			
+			{% if collection.description != blank %}
+				<div>
+				{{ collection.description }}
+				</div>
+			{% endif %}
+		</div>
+		{% endcomment %}
+	
+	{% endif %}
+
+
+{% comment %}
+{% paginate collection.products by 12 %}
+
+
+	{% for product in collection.products %}
+		
+		
+		<div>
+		
+			<a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+			{{ product.price | money }}
+			{% unless product.available %}<br><strong>sold out</strong>{% endunless %}
+			<a href="{{ product.url | within: collection }}">
+				<img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
+			</a>
+		
+		</div>
+		
+		
+	{% else %}
+		<p>no matches</p>
+	{% endfor %}
+	
+	{% if paginate.pages > 1 %}
+		{{ paginate | default_pagination }}
+	{% endif %}
+
+{% endpaginate %}
+{% endcomment %}
+
+
+
+
+{% if collection.metafields.shogun.below != blank %}
+
+	{{collection.metafields.shogun.below}}
+
+{% endif %}

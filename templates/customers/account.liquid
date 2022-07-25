@@ -1,0 +1,78 @@
+<!-- /templates/customers/account.liquid -->
+<div class="container my-5">
+	
+	<div class="row mb-3">
+		<div class="col-md-11">
+			
+			<h1>Customer Account</h1>
+			
+		</div>
+		<div class="col-md-1">
+			
+			<a class="btn btn-secondary" href="/account/logout" role="button">Logout</a>
+			
+		</div>
+	</div>
+	
+	
+	
+	<div class="row">
+		<div class="col-lg-8">
+			
+			
+			<div classs="row" id="customer_orders">
+				<h3>Orders</h3>
+			</div>
+			
+			
+			{% paginate customer.orders by 10 %}
+				
+				{% if customer.orders.size != 0 %}
+				
+					<!-- order details here -->
+					{% for order in customer.orders %}
+						<div class="row mb-3">
+							<div class="col-2">{{ order.name | link_to: order.customer_url }}</div>
+							<div class="col-2">{{ order.created_at | time_tag: '%b %d, %Y' }}</div>
+							<div class="col-2">{{ order.financial_status_label }}</div>
+							<div class="col-2">{{ order.fulfillment_status_label }}</div>
+							<div class="col-2">{{ order.total_price | money }}</div>
+						</div>
+					{% endfor %}
+				
+				{% else %}
+					<p>You haven't placed any orders yet.</p>
+				{% endif %}
+				
+				{{ paginate | default_pagination }}
+			{% endpaginate %}
+			
+				
+			
+			
+		</div>
+		<div class="col-lg-4">
+			
+			
+			{% if customer.default_address %}
+				<h3>Address</h3>
+				
+				<div>{{ customer.default_address.address1 }}</div>
+				{% if customer.default_address.address2 != "" %}
+					<div>{{ customer.default_address.address2 }}</div>
+				{% endif %}
+				<div>{{ customer.default_address.city}}, {% if address.province_code %}{{ customer.default_address.province_code }}, {% endif %}{{ customer.default_address.zip }}</div>
+				<div>{{ customer.default_address.country }}</div>
+				<div>{{ customer.default_address.phone }}</div>
+			{% endif %}
+			
+			
+		</div>
+		
+	</div>
+	
+	
+
+</div>
+
+

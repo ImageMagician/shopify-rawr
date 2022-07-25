@@ -1,0 +1,145 @@
+<script>
+  let dc = '';
+  let dc_text = '';
+  let dc_amt = '';
+  let dc_tot = '';
+  
+  let price_reg;
+  let prod_id;
+  let prod_display;
+  let prime15id;
+  
+  function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        dc = c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+  
+  getCookie('discount_code');
+  console.log('discount: ' + dc);
+</script>
+
+<div class="container px-2 py-5">
+	
+  <div class="row mb-3">
+    <div class="col">
+      <h1>Shopping Cart</h1>
+    </div>
+  </div>
+	
+  {% if cart.item_count > 0 %}
+		
+  <form action="/cart" method="post" novalidate>
+
+    <div class="row mb-3 tablet-and-up">
+      <div class="col-6 offset-6">
+        <div class="row">
+          <div class="col-3 text-center"><h5>Price</h5></div>
+          <div class="col-6 text-center"><h5>Quantity</h5></div>
+          <div class="col-3 text-center"><h5>Total</h5></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items -->
+    {% for item in cart.items %}
+
+    {% render 'theme-cart-item', item: item, row_number: forloop.index %}         
+
+    {% endfor %}
+
+    <div class="row mb-3">
+      <div class="col-sm-6 offset-sm-6">
+        <hr class="tablet-and-up">
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <div class="col-sm-6"></div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-6 col-md-4 offset-md-4 text-center">
+            <h3>Subtotal</h3>
+          </div>
+          <div class="col-6 col-md-4 text-center">
+
+            <span class="saso-cart-original-total">
+              <span id="cart_total" class="money h3 cart__subtotal" data-cart-total>
+                {{ cart.total_price | money }}
+              </span>
+            </span>
+            <span class="saso-cart-total"></span>
+            <script>
+              var tot_cart = {{ cart.total_price | divided_by: 100 }};
+              var item_tots = document.querySelectorAll('.item_tot');
+              var new_tot
+              var fin_tot = 0;
+              for ( let it = 0; it< item_tots.length; it++ ) {
+                new_tot = item_tots[it].innerHTML.substring(1);
+                new_tot = new_tot.replace(',', '');
+                console.log(new_tot);
+                fin_tot = parseFloat(fin_tot) + parseFloat(new_tot);
+              }
+              
+              if ( fin_tot !== tot_cart ) {
+              	fin_tot = '$' + fin_tot.toLocaleString("en-US", {minimumFractionDigits: 2} );
+              } else {
+                fin_tot = '{{ cart.total_price | money }}';
+              }
+              document.getElementById('cart_total').innerHTML = fin_tot;
+            </script>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+
+        <div class="">
+          <button name="update" class="btn btn-sm btn-secondary" type="submit">UPDATE CART</button>
+        </div>
+
+      </div>
+      <div class="col-6">
+		<div id="discount_bar">The discount code <span id="dc_code"></span> will be applied on checkout.</div>
+
+        <div class="d-grid gap-2">
+          <button name="checkout" class="btn btn-lg btn-warning" type="submit">CHECKOUT <i class="bi bi-cart-fill"></i></button>
+        </div>
+
+        <div class="d-grid gap-2 text-center p-2">
+          <small>
+            Shipping, taxes, and discounts are calculated during checkout.
+          </small>
+        </div>
+
+      </div>
+    </div>
+
+  </form>
+
+  {% else %}
+
+  	{% render 'theme-cart-empty' %}
+
+  {% endif %}
+
+</div>
+<script>
+  // ACTIVATE ONCE COOKIE ISSUE IS SOLVED
+   if ( dc != '' ) {
+    //document.getElementById('lion_discount_row').style.display = 'flex';
+  }
+</script>

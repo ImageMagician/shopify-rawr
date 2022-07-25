@@ -1,0 +1,118 @@
+<div class="container my-5">
+	
+	
+	{% paginate search.results by 20 %}
+	
+		<form action="/search" method="get" role="search">
+			
+			<div class="row my-3">
+				
+				<div class="col-md-6">
+					<h1>Search Results</h1>
+				</div>
+				
+				<div class="col-md-6">
+					
+					<div class="input-group mb-3">
+						<input type="search" class="form-control form-control-lg" name="q" value="{{ search.terms | escape }}" aria-label="Search Site">
+						<button type="submit" class="btn btn-lg btn-warning">Search</button>
+					</div>
+					
+				</div>
+
+			</div>
+			
+		</form>
+
+
+	<div class="row mb-3">
+		<div class="col-12">Results Found:  {{ paginate.items }}</div>
+	</div>
+
+
+
+
+	{% if search.performed %}
+		{% for item in search.results %}
+		
+		<div class="d-flex align-items-center mb-2">
+			
+			<div class="flex-shrink-0">
+			{% if item.featured_image %}
+				<a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
+					{{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt }}
+				</a>
+			{% endif %}
+			</div>
+			<div class="flex-grow-1 ms-3">
+				<h5>{{ item.title | link_to: item.url }}</h5>
+				<p>{{ item.content | strip_html | truncatewords: 50 }}</p>
+			</div>
+			
+		</div>
+		
+		{% else %}
+		
+		<div class="row my-5">
+			<div class="col-12"><h4>No Related Information Found</h4></div>
+		</div>
+		
+		{% endfor %}
+		
+	{% endif %}
+	
+
+
+	<div class="row">
+		<div class="col-12"></div>
+	</div>
+
+
+	<hr>
+
+
+	<div class="row">
+		<div class="col-12">
+			
+			<nav aria-label="Search Results Navigation">
+				<ul class="pagination pagination-lg justify-content-center">
+					
+					{% if paginate.previous.is_link %}
+					<li class="page-item"><a class="page-link" href="{{ paginate.previous.url }}"> <i class="bi bi-caret-left"></i> Previous </a></li>
+					{% endif %}
+					
+					{% for part in paginate.parts %}
+						{% if part.is_link %}
+							<li class="page-item"><a class="page-link" href="{{ part.url }}"> {{ part.title }} </a></li>
+						{% else %}
+							<li class="page-item active"><span class="page-link"> {{ part.title }} </span></li>
+						{% endif %}
+					{% endfor %}
+					
+					{% if paginate.next.is_link %}
+					<li class="page-item"><a class="page-link" href="{{ paginate.next.url }}"> Next <i class="bi bi-caret-right"></i> </a></li>
+					{% endif %}
+					
+				</ul>
+			</nav>
+			
+			
+			
+		</div>
+	</div>
+
+	
+	{% endpaginate %}
+
+
+</div>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,151 @@
+
+<!-- /templates/customers/login.liquid -->
+<div class="container my-5">
+	
+	<div class="row">
+		<div class="col-md-12">
+			
+			<h1>Customer Account Login</h1>
+			
+		</div>
+	</div>
+	
+	
+	
+	<div class="row">
+		<div class="col-md-8">
+			
+			
+			
+			
+			<div class="row my-4">
+				<div class="col-md-10">
+					
+					<p class="lead">Your customer account lets you login to see your order history, check the status of an order, and get current tracking information for your order.</p>
+					<p><a href="/account/register">Create Account</a></p>
+					
+				</div>
+			</div>
+			
+			
+		</div>
+		<div class="col-md-4">
+			
+			
+			{% form 'recover_customer_password' %}
+				
+				
+				{% if form.errors or form.posted_successfully? %}
+					{% assign recover_show = true %}
+				{% else %}
+					{% assign recover_show = false %}
+				{% endif %}
+				<!--<div>RECOVER_SHOW:  {% if recover_show %}YES{% else %}NO{% endif %}</div>-->
+			
+				
+				<div class="loginbox collapse multi-collapse {% if recover_show %}show{% endif %}">
+				<!-- Recover Password -->
+					
+					<h4 class="mb-3">Forgot Password</h4>
+					
+					{% if form.errors %}
+						{% assign recover_error = true %}
+						<div class="alert alert-danger" role="alert">
+							<i class="bi bi-exclamation-triangle m-2"></i> {{ form.errors | default_errors | strip_html }}
+						</div>
+					{% endif %}
+					
+					<div class="row">
+						<div class="col-12">
+							
+							<div class="form-floating">
+								<input type="email" class="form-control" name="email" autofocus />
+								<label for="customer_email">Email</label>
+							</div>
+							
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12 d-grid">
+							
+							<input type="submit" class="btn btn-warning my-3" value="Reset Password" />
+							
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12">
+							
+							<button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target=".loginbox" aria-controls="loginbox-forgot" aria-selected="false"> <i class="bi bi-chevron-double-left"></i> Back to Login </button>
+							
+						</div>
+					</div>
+					
+				<!-- END:  Recover Password -->
+				</div>
+			{% endform %}
+			
+			
+			<div class="loginbox collapse multi-collapse {% unless recover_show %}show{% endunless %}">
+				<!-- Login -->
+					
+					<h4 class="mb-3">Account Login</h4>
+					
+					{% form 'customer_login' %}
+					
+						{% if form.errors %}
+						<div class="alert alert-danger" role="alert">
+							<i class="bi bi-exclamation-triangle m-3"></i> {{ form.errors | default_errors | strip_html }}
+						</div>
+						{% endif %}
+						
+						<div class="row">
+							<div class="col-12">
+								
+								<div class="form-floating mb-3">
+									<input type="email" class="form-control" id="customer_email" name="customer[email]">
+									<label for="customer_email">Email</label>
+								</div>
+								
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-12">
+								
+								<div class="form-floating">
+									<input type="password" class="form-control col-12" id="customer_password" name="customer[password]">
+									<label for="customer_password">Password</label>
+								</div>
+								
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-12 d-grid justify-content-end">
+								
+								<button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target=".loginbox" aria-controls="loginbox-forgot" aria-selected="false">Forgot Password?</button>
+								
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-12 d-grid">
+								
+								<input type="submit" class="btn btn-warning my-3" value="Login" />
+								
+							</div>
+						</div>
+							
+					{% endform %}
+					
+				<!-- END:  Login -->
+			</div>
+			
+			
+			
+		</div>
+	</div>
+
+</div>

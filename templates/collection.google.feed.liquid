@@ -1,0 +1,85 @@
+{% layout none %}<?xml version="1.0"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+
+<channel>
+<title>{{ shop.name }} {{ collection.title | strip_html | strip_newlines | replace: '&', '&amp;' }}</title>
+<link>{{ shop.url }}</link>
+<description>{{ collection.description | strip_html | strip_newlines | replace: '&', '&amp;' }}</description>
+
+{%- paginate collection.products by 1000 -%}
+{%- for product in collection.products -%}
+  	{% if product.variants.size > 1 %}
+  {%- for variant in product.variants -%}
+    <item>
+        <title><![CDATA[{{ variant.title | strip_html | strip_newlines | escape | replace: 'amp;', 'and' | replace: '&#38;', 'and' | replace: "Ã©", "e" | replace: "Ã ", "a" }}]]></title>
+
+        <g:item_group_id>{{ product.id }}</g:item_group_id>
+        <g:id>{{ variant.sku }}</g:id>
+        <g:mpn>{{ variant.sku }}</g:mpn>
+		
+      	{% if product.metafields.productfeed != blank and product.metafields.productfeed.description.value.size > 0 %}
+      		<description><![CDATA[{{ product.metafields.productfeed.description | replace: 'allow 2-4 weeks for deliverable time', '' | strip_html | strip_newlines | replace: 'amp;', 'and' | replace: '&#38;', 'and' | replace: "..", ". " | replace: "  ", " " | replace: "â€˜", "&#39;" | replace: "â€™", "&#39;" | replace: "&#8216;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "Ã¢â‚¬â„¢", "&#39;" | replace: "Ã¢â‚¬Å“", "&#39;" | replace: "Ã¢â‚¬Ëœ", "&#39;"  | replace: "Ã‚Â´", "&#39;" | replace: "â€œ", "&#34;" | replace: "â€", "&#34;" | replace: "&#8211;", "-" | replace: "Ã¢â‚¬â€œ", "-" | replace: "Ã¢â‚¬â€", "-" | replace: "â€“", "&mdash;" | replace: "â€”", "&mdash;" | replace: "%", "&#37;" | replace: "Ã‚Â©", "&copy;" | replace: "Ã‚Â®", "&reg;" | replace: "Ã¢â€žÂ¢", "&trade;" | replace: "Ã‚Â£", "&pound;" | replace: "Ã¯Â¿Â­", "&#42;" | replace: "Ã¢â‚¬Â¢", "&#42;" | replace: "Ã¢â‚¬Â", "&#39;" | replace: "&#233;", "e" | replace: "Ã©", "e" | replace: "Ã ", "a" | replace: "Ã³", "o" | replace: "Ãª", "e" | replace: "ÃƒËœ", "O" | replace: "&#8482;", "" | replace: "&#174;", "" }}]]></description>
+      	{% else %}
+      		<description><![CDATA[{{ product.description | replace: 'allow 2-4 weeks for deliverable time', '' | strip_html | strip_newlines | replace: 'amp;', 'and' | replace: '&#38;', 'and' | replace: "..", ". " | replace: "  ", " " | replace: "â€˜", "&#39;" | replace: "â€™", "&#39;" | replace: "&#8216;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "Ã¢â‚¬â„¢", "&#39;" | replace: "Ã¢â‚¬Å“", "&#39;" | replace: "Ã¢â‚¬Ëœ", "&#39;"  | replace: "Ã‚Â´", "&#39;" | replace: "â€œ", "&#34;" | replace: "â€", "&#34;" | replace: "&#8211;", "-" | replace: "Ã¢â‚¬â€œ", "-" | replace: "Ã¢â‚¬â€", "-" | replace: "â€“", "&mdash;" | replace: "â€”", "&mdash;" | replace: "%", "&#37;" | replace: "Ã‚Â©", "&copy;" | replace: "Ã‚Â®", "&reg;" | replace: "Ã¢â€žÂ¢", "&trade;" | replace: "Ã‚Â£", "&pound;" | replace: "Ã¯Â¿Â­", "&#42;" | replace: "Ã¢â‚¬Â¢", "&#42;" | replace: "Ã¢â‚¬Â", "&#39;" | replace: "&#233;", "e" | replace: "Ã©", "e" | replace: "Ã ", "a" | replace: "Ã³", "o" | replace: "Ãª", "e" | replace: "ÃƒËœ", "O" | replace: "&#8482;", "" | replace: "&#174;", "" }}]]></description>
+      	{% endif %}
+
+        <g:condition>New</g:condition>
+        <g:brand>{{product.vendor | escape }}</g:brand>
+        <g:product_type>{{product.type | escape }}</g:product_type>
+        <g:availability>{% if variant.available and variant.inventory_quantity > 0 %}in_stock{% else %}out_of_stock{% endif %}</g:availability>
+
+
+        {% if variant.compare_at_price and variant.compare_at_price > 0 and variant.compare_at_price > variant.price %}
+        <g:sale_price>{{ variant.price | money_without_currency }} {{ shop.currency }}</g:sale_price>  
+        <g:price>{{ variant.compare_at_price | money_without_currency }} {{ shop.currency }}</g:price>
+        {% else %}
+        <g:price>{{ variant.price | money_without_currency }} {{ shop.currency }}</g:price>
+        {% endif %}
+
+        <g:image_link>{% if variant.image %}{{ variant.image | img_url: '800x800'}}{% else %}{{product.featured_image | img_url: '800x800'}}{% endif %}</g:image_link>
+        <link>{{shop.url}}{{product.url}}</link>
+
+    </item>
+  {% endfor %}
+  
+  	{% else %}
+	  {% assign cur_variant = product.variants[0] %}
+      <item>
+          <title><![CDATA[{{ product.title | strip_html | strip_newlines | escape | replace: 'amp;', 'and' | replace: '&#38;', 'and' | replace: "Ã©", "e" | replace: "Ã ", "a" }}]]></title>
+
+          <g:item_group_id>{{ product.id }}</g:item_group_id>
+          <g:id>{{ cur_variant.sku }}</g:id>
+          <g:mpn>{{ cur_variant.sku }}</g:mpn>
+
+          {% if product.metafields.productfeed != blank and product.metafields.productfeed.description.value.size > 0 %}
+      		<description><![CDATA[{{ product.metafields.productfeed.description | replace: 'allow 2-4 weeks for deliverable time', '' | strip_html | strip_newlines | replace: 'amp;', 'and' | replace: '&#38;', 'and' | replace: "..", ". " | replace: "  ", " " | replace: "â€˜", "&#39;" | replace: "â€™", "&#39;" | replace: "&#8216;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "Ã¢â‚¬â„¢", "&#39;" | replace: "Ã¢â‚¬Å“", "&#39;" | replace: "Ã¢â‚¬Ëœ", "&#39;"  | replace: "Ã‚Â´", "&#39;" | replace: "â€œ", "&#34;" | replace: "â€", "&#34;" | replace: "&#8211;", "-" | replace: "Ã¢â‚¬â€œ", "-" | replace: "Ã¢â‚¬â€", "-" | replace: "â€“", "&mdash;" | replace: "â€”", "&mdash;" | replace: "%", "&#37;" | replace: "Ã‚Â©", "&copy;" | replace: "Ã‚Â®", "&reg;" | replace: "Ã¢â€žÂ¢", "&trade;" | replace: "Ã‚Â£", "&pound;" | replace: "Ã¯Â¿Â­", "&#42;" | replace: "Ã¢â‚¬Â¢", "&#42;" | replace: "Ã¢â‚¬Â", "&#39;" | replace: "&#233;", "e" | replace: "Ã©", "e" | replace: "Ã ", "a" | replace: "Ã³", "o" | replace: "Ãª", "e" | replace: "ÃƒËœ", "O" | replace: "&#8482;", "" | replace: "&#174;", "" }}]]></description>
+          {% else %}
+              <description><![CDATA[{{ product.description | replace: 'allow 2-4 weeks for deliverable time', '' | strip_html | strip_newlines | replace: 'amp;', 'and' | replace: '&#38;', 'and' | replace: "..", ". " | replace: "  ", " " | replace: "â€˜", "&#39;" | replace: "â€™", "&#39;" | replace: "&#8216;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "&#8217;", "&#39;" | replace: "Ã¢â‚¬â„¢", "&#39;" | replace: "Ã¢â‚¬Å“", "&#39;" | replace: "Ã¢â‚¬Ëœ", "&#39;"  | replace: "Ã‚Â´", "&#39;" | replace: "â€œ", "&#34;" | replace: "â€", "&#34;" | replace: "&#8211;", "-" | replace: "Ã¢â‚¬â€œ", "-" | replace: "Ã¢â‚¬â€", "-" | replace: "â€“", "&mdash;" | replace: "â€”", "&mdash;" | replace: "%", "&#37;" | replace: "Ã‚Â©", "&copy;" | replace: "Ã‚Â®", "&reg;" | replace: "Ã¢â€žÂ¢", "&trade;" | replace: "Ã‚Â£", "&pound;" | replace: "Ã¯Â¿Â­", "&#42;" | replace: "Ã¢â‚¬Â¢", "&#42;" | replace: "Ã¢â‚¬Â", "&#39;" | replace: "&#233;", "e" | replace: "Ã©", "e" | replace: "Ã ", "a" | replace: "Ã³", "o" | replace: "Ãª", "e" | replace: "ÃƒËœ", "O" | replace: "&#8482;", "" | replace: "&#174;", "" }}]]></description>
+          {% endif %}
+
+          <g:condition>New</g:condition>
+          <g:brand>{{product.vendor | escape }}</g:brand>
+          <g:product_type>{{product.type | escape }}</g:product_type>
+          <g:availability>{% if cur_variant.available and cur_variant.inventory_quantity > 0 %}in_stock{% else %}out_of_stock{% endif %}</g:availability>
+
+
+          {% if cur_variant.compare_at_price and cur_variant.compare_at_price > 0 and cur_variant.compare_at_price > cur_variant.price %}
+          <g:sale_price>{{ cur_variant.price | money_without_currency }} {{ shop.currency }}</g:sale_price>  
+          <g:price>{{ cur_variant.compare_at_price | money_without_currency }} {{ shop.currency }}</g:price>
+          {% else %}
+          <g:price>{{ cur_variant.price | money_without_currency }} {{ shop.currency }}</g:price>
+          {% endif %}
+
+          <g:image_link>{{product.featured_image | img_url: '800x800'}}</g:image_link>
+          {% if product.images.size > 1 %}{%- for image in product.images offset:1 limit:10 -%}
+          <g:additional_image_link>https:{{ image.src | img_url: '800x800' }}</g:additional_image_link>
+          {% endfor %}{% endif %}
+          
+          <link>{{shop.url}}{{product.url}}</link>	
+
+      </item>
+  	{% endif %}
+{% endfor %}
+{% endpaginate %}
+</channel>
+</rss>
