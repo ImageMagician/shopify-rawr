@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+    {% render 'gtm-head' %}
+  
+  {% render 'shogun-head' %}
+{% render 'weglot_hreftags' %}
+{% render 'weglot_switcher' %}
+</head>
+  <body>
+    {{ skip_to_content_link }}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+          </header>
+          <main class="main__content" role="main">
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+    
+    <script>
+      
+      // Can't get this to fire for some reason. Trying to check for added nodes. It works in all testers, but not here.
+      const myElem = document.querySelector('.total-line-table__tbody');
+
+      const observer = new MutationObserver( function(mutations) {
+        console.log(mutations.addedNodes);
+        
+        for (var i = 0; i < mutations.length; i++) {
+          var mutation = mutations[i];
+          switch(mutation.type) {
+            case 'childList':
+              console.log(mutation.addedNodes);
+            break;
+          }
+        }
+      });
+      
+      // observe everything except attributes
+      observer.observe(myElem, {
+        childList: true, // observe direct children
+        subtree: true, // lower descendants too
+        characterData: true, // pass old data to callback
+      });
+      
+      
+      // Get cookie
+      let dc = '';
+
+      function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            dc = c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+      
+      getCookie('discount_code');
+
+      
+      // Target the "remove coupon" button and delete the discount_code cookie if clicked
+      const tag_btns = document.querySelector('.tag__button');
+      if (tag_btns !== null) {
+        tag_btns.addEventListener('click', function() {
+          if( dc !== null ) {
+            document.cookie = "discount_code=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          }
+        });
+      }
+      
+    </script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+{% if checkout %}
+  var step,
+	  option = '';
+
+  switch (Shopify.Checkout.step) {
+    case "contact_information":
+        step = 2;
+        break;
+    case "shipping_method":
+        step = 3;
+        break;
+    case "payment_method":
+        step = 4;
+        option = '{{ checkout.shipping_method.title }}';
+        break;
+    case "review":
+        step = 5;
+        break;
+    default:
+        break;
+  } 
+
+  /* {{ checkout.discount_applications[0].title }}  */
+  if(step) {
+	dataLayer.push({
+      'event': 'checkout',
+      'checkoutMetadata': {
+        'step': step,
+        'option': option,
+        'currency': '{{ checkout.currency.iso_code }}',
+        'subtotal': '' + ({{ checkout.line_items_subtotal_price }} / 100),
+        'total': '' + ({{ checkout.total_price }} / 100),
+        'count': _dlCartItems.length,
+        'coupon': '{% if checkout.discount_applications[0].title %}{{ checkout.discount_applications[0].title }}{% else %}{% endif %}'
+      },
+      'checkoutProducts': _dlCartItems
+    });
+  }
+{% endif %}

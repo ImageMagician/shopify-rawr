@@ -1,0 +1,23 @@
+{% comment %}  Add Add to Cart Tracking For GTM - TESTING ONLY {% endcomment %}
+<script>
+    if (_urlParams.utm_source === "testing") {
+        document.querySelectorAll('form[action="/cart/add"]').forEach(function(frm) {
+            frm.addEventListener('submit', function(e) {
+              window.dataLayer = window.dataLayer || [];
+              dataLayer.push({
+                'event': 'addToCart',
+                'addMetadata': [{
+                    'id': '{{ product.selected_or_first_available_variant.sku }}',
+                    'name': "{{ product.title | escape }}".replace('&#39;', "'"),
+                    'price': '' + ({{ product.price }} / 100),
+                    'variant': "{{ product.selected_or_first_available_variant.title | escape }}".replace('&#39;', "'"),
+                    'category': '{{ product.type }}',
+                    'brand': '{{ product.vendor }}',
+                    'type': '{{ product.type }}',
+                    'dynamicRemarketingId': 'shopify_{{ country.iso_code | default: "US" }}_{{ product.id }}{% if product.selected_or_first_available_variant.id  %}_{{ product.selected_or_first_available_variant.id }}{% endif%}'
+                }]
+              });
+            })
+        })      	 
+    }
+</script>

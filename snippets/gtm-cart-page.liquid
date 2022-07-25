@@ -1,0 +1,14 @@
+{% if request.page_type == "cart" %}
+  dataLayer.push({
+    'event': 'checkout',
+    'checkoutMetadata': {
+      'step': 1,
+      'currency': '{{ cart.currency.iso_code }}',
+      'subtotal': '' + ({{ cart.items_subtotal_price }} / 100),
+      'total': '' + ({{ cart.total_price }} / 100),
+      'count': {{ cart.item_count | default: 0 }},
+      'discount': '' + ({{ cart.total_discount | default: 0 }} / 100)
+    },
+    'checkoutProducts': _dlCartItems
+  });
+{% endif%}

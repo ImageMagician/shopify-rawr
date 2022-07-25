@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+  	{% include 'shop-sheriff-amp' %}
+    {% render 'theme-metatags' %}
+    {% render 'theme-header-css' %}
+    {% render 'theme-header-js' %}
+    
+    {{ content_for_header }}
+	{% render 'globo.alsobought.script' %}
+    
+	{% render 'shogun-head' %}
+    <meta name="facebook-domain-verification" content="aedf075ia2c89g3oj2jmih1ldcn64n" />
+  {% render 'weglot_hreftags' %}
+{% render 'weglot_switcher' %}
+</head>
+  <body id="app" class="{{ template }}" style="--bs-body-bg: #FFF;">
+	
+    {% render 'theme-menu' %}
+
+	    
+    <main class="container-fluid g-0" style="--bs-body-bg: #FFF;" role="main">
+    <div class="globoRecommendationsTop"></div>{{ content_for_layout }}{% render 'globo.alsobought.action' %}
+    </main>
+    
+    
+    {% render 'theme-footer' %}
+    {% render 'theme-footer-js' %}
+    <script defer src="https://connect.podium.com/widget.js#API_TOKEN=bd16db2b-dd3d-4167-b453-b983c0a26270" id="podium-widget" data-api-token="bd16db2b-dd3d-4167-b453-b983c0a26270"></script>
+
+  </body>
+</html>

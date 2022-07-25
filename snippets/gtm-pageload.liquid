@@ -1,0 +1,18 @@
+dataLayer.push({
+  'event': 'pageload',
+  'pageMetadata': {
+    'pageType': '{{ request.page_type | default: "general" }}',
+	'currencyCode': 'USD'
+  }
+});
+
+{% comment %}  If on search page {% endcomment %}
+
+{% if template == 'search' %}
+dataLayer.push({
+  'event': 'search',
+  'searchMetadata': {
+    'term': '{{ search.terms }}'
+  }
+});
+{% endif %}

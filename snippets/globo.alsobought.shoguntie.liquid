@@ -1,0 +1,38 @@
+<script>
+window.addEventListener("globoRelatedProductsAddedProductsToCart", function(e) {
+
+    var selected = Array.prototype.slice.call(document.querySelectorAll('.ga-products-table li.ga-product:not(.ga-deactive)'));
+
+    if (!selected.length) return;
+
+    var itemsForShogun = [];
+
+    selected.forEach((prod) => { 
+
+        var sku = prod.getAttribute('data-product-id'),
+            title = prod.querySelector('.ga-product_title'),
+            dflt = '(not set)';
+
+        title = title && title.innerText.trim() || dflt;
+
+        if(!sku && title === dflt) return; //Need a title or sku to send to GA/Shogun
+
+        var price = prod.querySelector('.ga-product_price');
+
+        price = price && price.innerText.trim().replace(/[$,]/g, '') || '0.00';
+
+        var quantity = 1;
+
+        itemsForShogun.push({
+            id: sku,
+            name: title,
+            price: price,
+            quantity: quantity
+        });
+    });
+
+    console.log(JSON.stringify(itemsForShogun, null, 2));
+
+    return itemsForShogun;
+});
+</script>

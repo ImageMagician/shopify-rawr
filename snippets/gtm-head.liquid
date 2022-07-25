@@ -1,0 +1,26 @@
+{% comment %}  Determine if GTM Should Load On Site - Head Code {% endcomment %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  {% comment %} Base dataLayer setup {% endcomment %}
+  {% render 'gtm-pageload' %}
+
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MKZH72P');
+
+  {% comment %} Check if Cart Has Been Updated {% endcomment %}
+  {% render 'gtm-cart-monitor' %}
+
+  {% comment %}  If the page has a product detail, push to dataLayer {% endcomment %}
+  {% render 'gtm-product-detail' %}
+
+  {% comment %}  If the page has a cart, setup checkout step 1 {% endcomment %}
+  {% render 'gtm-cart-page' %}
+
+  {% comment %}  If on checkout, set up checkout steps ecomm {% endcomment %}
+  {% render 'gtm-checkout-page' %}
+    
+</script>

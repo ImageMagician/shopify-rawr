@@ -1,0 +1,102 @@
+{% if cart %}
+  {% if cart.item_count == 0 %}
+      var _dlCartItems = [];
+  {% else %}
+    var _dlCartItems = [
+    {% for item in cart.items %}
+        {
+          'id': '{{ item.product.selected_or_first_available_variant.sku }}',
+          'name': "{{ item.product.title | escape }}".replace('&#39;', "'"),
+          'variant': "{{ item.product.selected_or_first_available_variant.title | escape }}".replace('&#39;', "'"),
+          'price': '' + ({{ item.final_price }} / 100),
+          'quantity': {{ item.quantity | default: 1 }},
+          'category': '{{ item.product.type }}',
+          'brand': '{{ item.product.vendor }}',
+		  'dynamicRemarketingId': 'shopify_{{ country.iso_code | default: "US" }}_{{ item.product.id }}{% if item.product.selected_or_first_available_variant.id  %}_{{ item.product.selected_or_first_available_variant.id }}{% endif%}'
+        },
+    {% endfor %}
+    ];
+  {% endif %}
+{% else if checkout %}
+  var _dlCartItems = [
+    {% for item in checkout.line_items %}
+        {
+          'id': '{{ item.product.selected_or_first_available_variant.sku}}',
+          'name': "{{ item.product.title | escape }}".replace('&#39;', "'"),
+          'variant': "{{ item.product.selected_or_first_available_variant.title | escape }}".replace('&#39;', "'"),
+          'price': '' + ({{ item.final_price }} / 100),
+          'quantity': {{ item.quantity | default: 1 }},
+          'category': '{{ item.product.type }}',
+          'brand': '{{ item.product.vendor }}',
+          'dynamicRemarketingId': 'shopify_{{ country.iso_code | default: "US" }}_{{ item.product.id }}{% if item.product.selected_or_first_available_variant.id  %}_{{ item.product.selected_or_first_available_variant.id }}{% endif%}'
+        },
+    {% endfor %}
+    ];
+{% else %}
+  var _dlCartItems = [];
+{% endif %}
+
+
+{% if order %}
+{% comment %}  If order page, remove the cart in storage for next events {% endcomment %}
+sessionStorage.setItem('aOCRT', JSON.stringify([]));
+{% else %}
+{% comment %}  If cart is updated, send add and remove events {% endcomment %}
+(function() {
+    var key = 'aOCRT', _oldCart = JSON.parse(sessionStorage.getItem(key)),
+        remove = 'removeFromCart', add = 'addToCart';
+
+    var pushToCartDL = function (product, event, amount) {
+        var copy = Object.assign({}, product);
+        copy.quantity = amount;
+        var template = {
+            'event': event
+        };
+
+        template[event + 'Metadata'] = copy;
+        dataLayer.push(template)
+    };
+
+    if(!_oldCart || !Array.isArray(_oldCart)) _oldCart = [];
+
+    _dlCartItems.forEach(function(newItem) {
+        var found = false,
+            amountChange = null;
+
+        _oldCart.forEach(function(oldItem) {
+            if(oldItem.id === newItem.id && oldItem.name === newItem.name) {
+                found = true;
+                if (oldItem.quantity !== newItem.quantity) {
+                    amountChange = {amount: (newItem.quantity < oldItem.quantity) ? (oldItem.quantity - newItem.quantity) : (newItem.quantity - oldItem.quantity), direction: (newItem.quantity < oldItem.quantity) ? remove : add};
+                }
+            }
+        });
+
+        //If there was an amount change with same product, check if add or remove
+        if (found && amountChange) {
+            pushToCartDL(newItem, amountChange.direction, amountChange.amount);
+        //Not found, need to add
+        } else if(!found) {
+            pushToCartDL(newItem, add, newItem.quantity);
+        }
+    });
+
+    _oldCart.forEach(function(oldItem) {
+        var found = false;
+
+        _dlCartItems.forEach(function(newItem) {
+            if(newItem.id === oldItem.id && newItem.name === oldItem.name) {
+                found = true;
+            }
+        });
+
+        //If the old item is not found, remove it from cart
+        if(!found) {
+            pushToCartDL(oldItem, remove, oldItem.quantity);
+        }
+    });
+
+    //Store the new cart for next page
+    sessionStorage.setItem(key, JSON.stringify(_dlCartItems));
+})();
+{% endif %}
