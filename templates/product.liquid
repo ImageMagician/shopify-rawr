@@ -31,116 +31,75 @@
       </div>
   {% endif %}
 
-<div class="row gx-5">
+  <div class="row gx-5">
     <div class="col-lg-7">
         <!-- START MAGICZOOMPLUS IMAGES -->{% render 'magiczoomplus' %}<!-- END MAGICZOOMPLUS IMAGES -->
     </div>
     <div class="col-lg-5">
-            <h1>{{ product.title }}</h1>
-<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{product.id}}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display: block;"></span>
+        <h1>{{ product.title }}</h1>
+        <span class="stamped-product-reviews-badge stamped-main-badge" 
+          data-id="{{product.id}}" 
+          data-product-title="{{product.title}}" 
+          data-product-type="{{product.type}}" 
+          style="display: block;"></span>
             
-            <div class="mb-3">
-                {% unless product.metafields.lionenergy.tagline == blank %}
-                    <h5>{{ product.metafields.lionenergy.tagline }}</h5>
-                {% endunless %}
+        <div class="mb-3">
+            {% unless product.metafields.lionenergy.tagline == blank %}
+                <h5>{{ product.metafields.lionenergy.tagline }}</h5>
+            {% endunless %}
+        </div>
+        <div class="mb-0">
+            <div class="float-end">
+                <a href="#info" id="reviewClick">
+                    <span class="stamped-product-reviews-badge stamped-main-badge float-right" data-id="{{ product.id }}" data-product-sku="{{ product.handle }}" data-product-type="{{product.type}}" data-product-title="{{product.title}}" style="display: inline-block;">{{ product.metafields.stamped.badge }}</span>
+                </a>
             </div>
-            
-            
-            <div class="mb-0">
-                <div class="float-end">
-                    <a href="#info" id="reviewClick">
-                        <span class="stamped-product-reviews-badge stamped-main-badge float-right" data-id="{{ product.id }}" data-product-sku="{{ product.handle }}" data-product-type="{{product.type}}" data-product-title="{{product.title}}" style="display: inline-block;">{{ product.metafields.stamped.badge }}</span>
-                    </a>
-                </div>
-                <div>
-                    {% render 'product-price', product: product, use_variant: true %}
-                </div>
+            <div>
+                {% render 'product-price', product: product, use_variant: true %}
             </div>
+        </div>
             
+        <!--  Quick Bar -->
+        {% render 'theme-product-quickbar', meta:product.metafields.lionenergy %}
+        <!--  END:  Quick Bar -->
             
-            <!--  Quick Bar -->
-            {% render 'theme-product-quickbar', meta:product.metafields.lionenergy %}
-            <!--  END:  Quick Bar -->
-            
-            
-            <div class="row">
-                <div class="col-12">
-                    {{ product.description }}
-                </div>
+        <div class="row">
+            <div class="col-12">
+                {{ product.description }}
             </div>
-            <div class="row">
-                <div class="col-12">
-                    
-                </div>
-            </div>
-            
-            
-            {% comment %}
-            * * *   FUTURE FEATURE:  PRODUCT UPSELLS (Powered by Rawr Code)   * * *
-            {% endcomment %}
-            {% comment %}
-            {% if product.metafields.lionenergy.upsells %}
-            
-                <div>Upsells</div>
-                <div>Type: {{ product.metafields.lionenergy.upsells.type }}</div>
-                <div>Wash: {{ product.metafields.lionenergy.upsells.value }}</div>
+        </div>
+        <div class="row">
+            <div class="col-12">
                 
-                {% assign upsells = product.metafields.lionenergy.upsells.value | split: ',' %}
-                <ul class="list-group">
-                    
-                    {% for upsell in upsells %}
-                        {% if all_products[upsell].available == true %}
-                        
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-                                    <img class="mx-3" src="{{ all_products[upsell] | img_url }}" style="max-height: 50px; max-width: 50px;" />
-                                    {{ all_products[upsell].title }}
-                                </div>
-                                <span>
-                                    <strong>{{ all_products[upsell].price | money }}</strong>
-                                </span>
-                            </li>
-                            
-                        {% endif %}
-                    {% endfor %}
-                    
-                </ul>
-                
+            </div>
+        </div>
+        <!--   START:  ADD TO CART FORM   -->
+        {% form 'product', product %}
+          
+            {% if product.has_only_default_variant %}
+                {% for variant in product.variants %}
+                    <input type="hidden" id="product-select" name="id" value="{{ variant.id }}">
+                {% endfor%}
+            {% else %}
+                {% for variant in product.variants %}
+                    <a class="btn {% if product.selected_or_first_available_variant.id == variant.id %}btn-outline-warning{% else %}btn-outline-dark{% endif %} m-2" id="variant-option-{{ variant.id }}" name="variant-{{ variant.id }}" href="{{ variant.url }}" role="button"> {{ variant.title }} </a>
+                {% endfor%}
             {% endif %}
-            {% endcomment %}
+          
+            <input type="hidden" id="product-select" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <input type="hidden" name="quantity" min="1" value="1">
             
-            
-            <!--   START:  ADD TO CART FORM   -->
-
-            {% form 'product', product %}
-              
-                {% if product.has_only_default_variant %}
-                    {% for variant in product.variants %}
-                        <input type="hidden" id="product-select" name="id" value="{{ variant.id }}">
-                    {% endfor%}
+            <div class="d-grid gap-2 col-12 my-3 mx-auto">
+                {% if product.available %}
+                    <button type="submit" class="btn btn-lg btn-warning"><i class="bi bi-cart2"></i>  Add to Cart</button>
                 {% else %}
-                    {% for variant in product.variants %}
-                        
-                        <a class="btn {% if product.selected_or_first_available_variant.id == variant.id %}btn-outline-warning{% else %}btn-outline-dark{% endif %} m-2" id="variant-option-{{ variant.id }}" name="variant-{{ variant.id }}" href="{{ variant.url }}" role="button"> {{ variant.title }} </a>
-                        
-                    {% endfor%}
+                    <button type="button" class="btn btn-secondary btn-lg" disabled>Out of Stock</button>
                 {% endif %}
-              
-                <input type="hidden" id="product-select" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                <input type="hidden" name="quantity" min="1" value="1">
-                
-                <div class="d-grid gap-2 col-12 my-3 mx-auto">
-                    {% if product.available %}
-                        <button type="submit" class="btn btn-lg btn-warning"> <i class="bi bi-cart2"></i>  Add to Cart  </button>
-                    {% else %}
-                        <button type="button" class="btn btn-secondary btn-lg" disabled>Out of Stock</button>
-                    {% endif %}
-                </div>
-              
-            {% endform %}
-      
-            <!-- END OF CART -->
+            </div>
+          
+        {% endform %}
+  
+        <!-- END OF CART -->
 
     </div>
 </div>
