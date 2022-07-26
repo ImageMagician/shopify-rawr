@@ -1,0 +1,113 @@
+{{ content_for_index }}
+<a href="/pages/summer-sale" id="topbar_highlight" class="text-center">SUMMER DEALS. SAVE UP TO 50%. CLICK HERE.</a>
+{% assign menu = linklists.main-menu %}
+<nav class="sticky-top navbar navbar-light navbar-expand-lg bg-light border-bottom"  style="background-color: #fff;">
+  	<div class="container">
+        <a class="navbar-brand" href="https://lionenergy.com/">
+            <img id="logo" src="https://cdn.shopify.com/s/files/1/1826/1453/files/Lion-Energy.svg?v=1633541417" height="50" width="175" alt="Lion Energy" style="position: relative; top: -4px;" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+
+            <ul class="navbar-nav me-auto ml-3 mb-2 mb-lg-0">
+				
+				{% for link in menu.links %}
+					
+					{% if link.levels > 0 %}
+					
+						<li class="nav-item dropdown has-megamenu">
+							<a class="nav-link dropdown-toggle text-uppercase link-secondary" href="{{ link.url }}" data-bs-toggle="dropdown"> {{ link.title }} </a>
+							<div class="dropdown-menu megamenu" role="menu">
+								
+								<div class="row justify-content-md-center g-3">
+								
+									{% for sub1 in link.links %}
+												
+												{% if sub1.levels > 0 %}
+													
+													{% comment %} If we have sub items, then this is a heading, with sub items. {% endcomment %}
+													
+													<div class="col-lg-2 col-6">
+														<div class="col col-megamenu">
+															<h6 class="title"><a class="link-dark text-uppercase" href="{{ sub1.url }}"> {{ sub1.title }} </a></h6>
+															<ul class="list-unstyled">
+																{% for sub2 in sub1.links %}
+																	<li><a class="link-secondary" href="{{ sub2.url }}"> {{ sub2.title }} </a></li>	
+																{% endfor %}
+															</ul>
+														</div>  <!-- col-megamenu.// -->
+													</div><!-- end col-3 -->
+												
+												{% else %}
+													
+													{% comment %} Otherwise this is a simple list.  But is limited to a single column right now. {% endcomment %}
+													{% if forloop.first == true %}
+														<div class="col-lg-2 col-6">
+															<div class="col col-megamenu">
+																<ul class="list-unstyled">
+													{% endif %}
+													
+															<li><a class="link-secondary" href="{{ sub1.url }}"> {{ sub1.title }} </a></li>
+													
+													{% if forloop.last == true %}
+																</ul>
+															</div>  <!-- col-megamenu.// -->
+														</div><!-- end col-3 -->
+													{% endif %}
+													
+													
+												{% endif %}
+												
+									{% endfor %}
+									
+								</div><!-- end row -->
+								
+							</div> <!-- dropdown-mega-menu.// -->
+						</li>
+						
+					{% else %}
+						
+						<li class="nav-item">
+							<a class="nav-link text-uppercase link-secondary" href="{{ link.url }}"> {{ link.title }} </a>
+						</li>
+					
+					{% endif %}
+			
+				{% endfor %}
+				
+            </ul>
+            <div class="col-md-2 text-end">
+                {% if shop.customer_accounts_enabled %}
+                {% if customer %}
+                    <a class="lion-account-icons mx-2 mx-3" href="/account" role="button"><i class="bi bi-person-circle"></i></a>
+                    <!--<a class="btn btn-light" href="/logout" role="button">Logout</a>-->
+                {% else %}
+                    <a class="lion-account-icons mx-2 mx-3" href="/account" role="button"><i class="bi bi-person-circle"></i></a>
+                    <!--<a class="btn btn-light" href="/register" role="button">Register</a>-->
+                {% endif %}
+                {% endif %}
+                <a class="lion-account-icons mx-2" href="/cart"><i class="bi bi-cart"></i></a>
+                <a class="lion-account-icons mx-2" href="#" data-bs-toggle="offcanvas" data-bs-target="#search-box" v-on:click="setFocusSearch"><i class="bi bi-search"></i></a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<div class="offcanvas offcanvas-top" tabindex="-1" id="search-box" aria-labelledby="search-box">
+    <div class="offcanvas-body m-0 p-0 d-flex align-items-center justify-content-center" style="">
+	
+		<div class="mx-2 p-0"><i class="bi bi-search"></i></div>
+		<div class="mx-2 p-0">
+			<form action="/search" method="get" role="search">
+				<input class="form-control form-control-lg" type="search" ref="search" id="search" name="q" value="{{ search.terms | escape }}" placeholder="Search LionEnergy.com">
+			</form>
+		</div>
+		<div class="mx-2 p-0"><button type="button" class="btn-close text-reset mx-1" data-bs-dismiss="offcanvas" aria-label="Close"></button></div>
+	
+    </div>
+</div>
+
+<a id="top" name="top"></a>

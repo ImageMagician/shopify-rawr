@@ -1,0 +1,52 @@
+{% comment %}
+    Renders a list of product's price (regular, sale)
+
+    Accepts:
+    - product: {Object} Product Liquid object (optional)
+    - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+    - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+    - price_class: {String} Adds a price class to the price element (optional)
+
+    Usage:
+    {% render 'price', product: product %}
+{% endcomment %}
+
+
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign available = target.available | default: false
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+-%}
+
+<div class="d-flex mb-0">
+
+  {% if compare_at_price %}
+  <div class="p-2">
+    <span class="h3 text-secondary" style="text-decoration: line-through;"> &nbsp;{{ compare_at_price | money }}&nbsp; </span>
+  </div>
+  {% endif %}
+
+  <div onload="product-id-check" class="p-2">
+    <div class="product__price">
+      <span id="product_price_display" class="h3 price__regular price-item price-item--regular">
+	      {{ money_price }}
+      </span>
+    </div>
+  </div>
+	
+</div>
+<div id="discount_bar">The discount code <span id="dc_code"></span> will be applied on checkout.</div>

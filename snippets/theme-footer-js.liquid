@@ -1,0 +1,73 @@
+{% comment %}  ==========  JS FOOTER INCLUDES - ALL PAGES  ==========  {% endcomment %}
+
+<script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+
+{% comment %}  ==========  Lion Specific Code.  Not Used Right Now  ==========  {% endcomment %}
+{% comment %}
+{{ 'application.js' | asset_url | script_tag }}
+{% endcomment %}
+
+
+{% comment %}  ==========  PRODUCT TEMPLATE && CART  ==========  {% endcomment %}
+{% if template contains 'product' or template contains 'cart' %}
+
+	{% comment %}  --  Affirm - Lending  --  {% endcomment %}
+	<script async src="{{ 'affirm.js?v=1615324202&shop=lion-energy.myshopify.com' | asset_url }}"></script>
+
+{% endif %}
+{% comment %}  ==========  END:  PRODUCT && CART  ==========  {% endcomment %}
+
+
+{% comment %}  ==========  PRODUCT TEMPLATE ONLY  ==========  {% endcomment %}
+{% if template contains 'product' %}
+
+
+{% comment %}  --  Stamped.io - Product Reviews  --  {% endcomment %}
+<script async type="text/javascript" id="stamped-script-widget" data-api-key="pubkey-c4JZu85HsfQj3VV7R952CG1mrtGsO2" src="https://cdn1.stamped.io/files/widget.min.js"></script>
+
+{% comment %}  --  magic360 code begins  --  {% endcomment %}
+{% assign Magic360ImageCount = 36 %}
+{% assign disable360 = false %}
+{% for tag in product.tags %}
+	{% if tag == 'no360' %}
+		{% assign disable360 = true %}
+	{% endif %}
+	{% assign tag_ = tag | replace: 'spinimages=', '' %}
+	{% if tag_ != tag %}
+		{% assign Magic360ImageCount = tag_  | times: 1 %}
+	{% endif %}
+{% endfor %}
+{% capture m360 %}{% render 'magic360' %}{% endcapture %}
+{% if m360 contains 'Liquid error' or product.images.size < Magic360ImageCount or disable360 %}
+{% else %}
+	<div style="display:none" id="m360">{{ m360 }}</div>
+	<script>
+		var $m360 = document.getElementById('m360');
+		var $g = document.querySelector('.product__photos');
+		if ($g) {
+		$g.innerHTML = $m360.innerHTML;
+		}
+		$m360.innerHTML = ''
+	</script>
+{% endif %}
+{% comment %}  --  magic360 code ends  --  {% endcomment %}
+{% comment %}  --  magiczoomplus code begins  --  {% endcomment %}
+{% capture mzp %}{% render 'magiczoomplus' %}{% endcapture %}
+{% if mzp contains 'Liquid error' %}
+{% else %}
+	<div style="display:none" id="mzp">{{ mzp }}</div>
+	<script>
+		var $mzp = document.getElementById('mzp');
+		var $g = document.querySelector('.shg-product-image-wrapper');
+		if (false && $g) {
+		$g = $g.parentNode.parentNode;
+		$g.innerHTML = $mzp.innerHTML + '<div style="display:none">'+$g.innerHTML+'</div>';
+		}
+		$mzp.innerHTML = ''
+	</script>
+{% endif %}
+{% comment %}  --  magiczoomplus code ends  --  {% endcomment %}
+
+{% endif %}
+{% comment %}  ==========  END:  PRODUCT TEMPLATE ONLY  ==========  {% endcomment %}

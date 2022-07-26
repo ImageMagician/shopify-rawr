@@ -1,0 +1,28 @@
+{% comment %}Managed by ShopSheriff Shopify app{% endcomment %}
+
+{% if template == 'blog' %}
+  {% unless blog.handle == 'all' %}
+  {% unless current_tags %}
+    {% assign amp_path = '/blogs/' | append: blog.handle %}
+    {% if current_page > 1 %}
+    {% assign amp_path = amp_path | append: '?page=' | append: current_page %}
+    {% endif %}
+  {% endunless %}
+  {% assign ssmeta = blog.metafields.shopsheriff %}
+  {% if ssmeta %}
+    {% assign ssMetaVisible = blog.metafields.shopsheriff.amp-visibility %}
+    {% if ssMetaVisible == 0 %}
+      {% assign denyAmp = true %}
+    {% endif %}
+  {% endif %}
+  {% endunless %}
+{% endif %}
+{% if template == 'article' %}
+  {% assign amp_path = '' | append: article.url %}
+{% endif %}
+<script type="text/javascript">var _0x242c=['ampproject.org','/a/s/','search','utm','shopsheriff.amp-snippet.end','performance','mark','/cart','location','pathname','referrer','includes'];(function(_0x1e8aec,_0xbf9839){var _0x20b6f4=function(_0x8173ad){while(--_0x8173ad){_0x1e8aec['push'](_0x1e8aec['shift']());}};_0x20b6f4(++_0xbf9839);}(_0x242c,0x1b5));var _0x3d11=function(_0xa6dc9b,_0x7b518b){_0xa6dc9b=_0xa6dc9b-0x0;var _0x5a9596=_0x242c[_0xa6dc9b];return _0x5a9596;};var a=window[_0x3d11('0x0')]&&window[_0x3d11('0x0')][_0x3d11('0x1')];if(a){window[_0x3d11('0x0')][_0x3d11('0x1')]('shopsheriff.amp-snippet.start');}var doc=document;var redirect=_0x3d11('0x2')===window[_0x3d11('0x3')][_0x3d11('0x4')]&&(doc[_0x3d11('0x5')][_0x3d11('0x6')](_0x3d11('0x7'))||doc[_0x3d11('0x5')]['includes'](_0x3d11('0x8')))&&!doc[_0x3d11('0x3')][_0x3d11('0x9')][_0x3d11('0x6')](_0x3d11('0xa'));if(redirect){var f=doc[_0x3d11('0x3')][_0x3d11('0x9')]?'&':'?';window[_0x3d11('0x3')]=window[_0x3d11('0x3')]['origin']+window[_0x3d11('0x3')][_0x3d11('0x4')]+f+'utm_source=shopsheriff&utm_medium=amp&utm_campaign=shopsheriff&utm_content=add-to-cart';}if(a){window[_0x3d11('0x0')]['mark'](_0x3d11('0xb'));}</script>
+{% unless denyAmp %}
+{% if amp_path %}
+   <link rel="amphtml" href="{{ 'https://' | append: 'lionenergy.com/a/s' | append: amp_path  }}">
+{% endif %}
+{% endunless %}

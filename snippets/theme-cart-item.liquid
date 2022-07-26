@@ -1,0 +1,140 @@
+
+		<div class="row my-2 py-1 cart-line-item align-items-center">
+          <div class="col-sm-6">
+            <div class="row align-items-center">
+              <div class="col-4 text-center">
+                <img src="{{ item | img_url: 'small' }}" alt="{{ item.title | escape }}" class="position-relative">
+              </div>
+
+              <div class="col-8 align-items-center">
+                <h5 class="cart-item-title">
+                  <a class="link-secondary" href="{{ item.url }}" style="text-decoration: none;">
+                    {%- if item.product.has_only_default_variant -%}
+                      {{ item.product.title }}
+                    {%- else -%}
+                      {{ item.variant.title }}
+                    {%- endif -%}
+                  </a>
+                </h5>
+              </div>
+			</div>
+          </div>
+          
+          <div class="col-sm-6">
+			<div class="row align-items-center">
+              <div class="col-3 text-center pb-3">
+                <h6 class="mobile-only">PRICE</h6>
+                <script>
+                </script>
+                {% if item.original_line_price != item.line_price %}
+                <div>
+                  <s>{{ item.original_line_price | money }}</s>
+                  <span class="text-red">  {{ item.line_price | money }} </span>
+                </div>
+                {% else %}
+                <div id="product_price_display_{{item.id}}">{{ item.price | money }}</div>
+                  <script>
+                    dc_price = {{ item.price | divided_by: 100 }};
+                    price_itm = {{ item.price | divided_by: 100 }};
+                    price_reg = "{{ item.price | money }}";
+                    prod_id = {{ item.id }};
+                    prod_display = document.getElementById('product_price_display_' + prod_id);
+                    prime15id = [ 29484632113254,
+                                 31936601391206,
+                                 33018143809,
+                                 39469714538598,
+                                 39641683787878 ];
+
+                    prime10id = [ 30985505177702,
+                                 39469709525094,
+                                 39437026164838,
+                                 39437026459750,
+                                 32206510194790,
+                                 31605179351142
+                                ];
+
+                    if ( dc != '' && dc != null && dc != undefined ) {
+                      if ( dc == '10lionenergy' ) {
+                        dc_price = {{ item.price | times: 0.90 | divided_by: 100 | decimals: 2 }};
+                        //console.log('10%: ' + dc_price);
+
+                      } else if ( dc == 'prime10' ) {
+                        for ( let p10 = 0; p10<prime10id.length; p10++ ) {
+                          if ( prod_id == prime10id[p10] ) {
+                            dc_price = {{ item.price | times: 0.90 | divided_by: 100 | decimals: 2 }};
+                            break;
+                          }
+                          else {
+                            dc_price = {{ item.price | divided_by: 100 | decimals: 2 }}
+                          }
+                        }
+                      }
+
+                        else if ( dc == 'prime20solar' ) {
+                          if ( prod_id ==  15559657685094 ) {
+                            dc_price = {{ item.price | times: 0.50 | divided_by: 100 | decimals: 2 }};
+                          }
+                          else {
+                            dc_price = {{ item.price | divided_by: 100 | decimals: 2 }}
+                          }
+                        } 
+
+                        else if ( dc == 'prime15' ) {
+                          for ( let p15 = 0; p15<prime15id.length; p15++ ) {
+                            if ( prod_id == prime15id[p15] ) {
+                              dc_price = {{ item.price | times: 0.85 | divided_by: 100 | decimals: 2 }};
+                              break;
+                            }
+                            else {
+                              dc_price = {{ item.price | divided_by: 100 | decimals: 2 }}
+                            }
+                          }
+                        } 
+
+                        else {
+                          dc_price = {{ item.price | times: 0.85 | divided_by: 100 | decimals: 2 }};
+                        }
+                            
+                        if ( price_itm !== dc_price ) {
+
+                          dc_comma = '$' + dc_price.toLocaleString("en-US", {minimumFractionDigits: 2} );
+                          prod_display.innerHTML = '<span style="text-decoration:line-through; color: #999">' + price_reg + '</span> <strong>' + dc_comma + '</strong><br /><small>' + dc.toUpperCase() + ' ELIGIBLE</small>';
+
+                        }
+                      }
+
+                  </script>
+                {% endif %}
+                
+                {% for discount in item.discounts %}
+                	<div>{{ discount.title }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="col-6 text-center pb-3 align-items-center">
+                <h6 class="mobile-only">QTY</h6>
+                <div>
+                  <input class="cart-item-input" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
+                  <span class="text-dark badge bg-secondary">
+                    <a class="text-light" href="/cart/change?line={{ row_number }}&amp;quantity=0" style="text-decoration: none;">
+                      <span class="desktop-only">Remove</span>
+                      <i class="bi bi-x-circle"></i>
+                    </a>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-3 text-center pb-3 align-items-center">
+                <h6 class="mobile-only">TOTAL</h6>
+                <div id="item_tot_{{item.id}}" class="item_tot">{{ item.final_line_price | money }}</div>
+                <script>
+                  var final_price = dc_price * {{item.quantity}};
+                  console.log( {{ item.final_line_price | divided_by: 100 }} + ', ' + dc_price + ', ' + final_price + ', ' + {{item.quantity}})
+                  if (final_price !== {{ item.final_line_price | divided_by: 100 }} ) {
+                  	document.getElementById('item_tot_{{item.id}}').innerHTML = "$" + final_price.toLocaleString("en-US", {minimumFractionDigits: 2} );
+                   }
+                </script>
+              </div>
+            </div>
+          </div>
+		</div>
