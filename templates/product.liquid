@@ -134,11 +134,13 @@
    
     // run when a radio button is selected
     function radioChecked() {
+      
         // variant will hold all the selected radio button items from each unique group
         let variant = [];
         
         // cycle through each radio button group and get the selected item's value
         for ( let i = 0; i < unique.length; i++ ) {
+          // get the unique group of buttons
             const unique_group = document.querySelectorAll('input[name="' + unique[i] + '"]');
             for ( let j = 0; j < unique_group.length; j++ ) {
               console.log('unique group: ' + unique_group[j].value);
