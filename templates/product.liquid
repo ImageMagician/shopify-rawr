@@ -111,14 +111,14 @@
      *  Variant pricing switch
      */
   
-    // get the contents of the 'project_variants' jsonlist and parse for javascript
+    // get the contents of the 'project_variants' json list and parse for javascript
     const data = document.getElementById('product_variants').innerHTML;
     const parse = JSON.parse(data);
     
     //unique is the storage for each unique radio button name
     let unique = [];
     
-    // go through all radio buttons 
+    // go through all radio buttons and labels
     const radios = document.querySelectorAll('input[type="radio"]');
     console.log(radios.length);
 
@@ -140,13 +140,13 @@
         
         // cycle through each radio button group and get the selected item's value
         for ( let i = 0; i < unique.length; i++ ) {
+          
           // get the unique group of buttons
             const unique_group = document.querySelectorAll('input[name="' + unique[i] + '"]');
 
           // cycle through looking for which is checked
           // also clear the class "selected" from the label and add it to the checked one
             for ( let j = 0; j < unique_group.length; j++ ) {
-              console.log('unique group: ' + unique_group[j].value);
                 if ( unique_group[j].checked ) {
                   console.log( variant[i] + ' : ' + unique_group[j].value);
                     variant[unique[i]] = unique_group[j].value;
