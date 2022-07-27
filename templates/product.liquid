@@ -131,9 +131,7 @@
             unique.push(radios[i].getAttribute('name'));
         }
     }
-
-    console.log(unique);
-    
+   
     // run when a radio button is selected
     function radioChecked() {
         // variant will hold all the selected radio button items from each unique group
@@ -150,8 +148,6 @@
                 }
             }
         }
-        
-        console.log(variant);
         
         // check each variant from the json list and see which one matches all the radio button values
         for ( i = 0; i<parse.length; i++ ) {
@@ -282,6 +278,7 @@ document.write('</span>');
       margin: 0 8px 8px 0;
       border-radius: 5px;
       font-size: .875em;
+    cursor:pointer;
   }
   
   .shopify-product-form fieldset label:hover {
