@@ -139,6 +139,7 @@
         for ( let i = 0; i < unique.length; i++ ) {
             const unique_group = document.querySelectorAll('input[name="' + unique[i] + '"]');
             for ( let j = 0; j < unique_group.length; j++ ) {
+              console.log(unique_group[j]);
                 if ( unique_group[j].checked ) {
                     variant[unique[i]] = unique_group[j].value;
                 }
