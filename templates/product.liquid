@@ -159,9 +159,15 @@
           // cycle through looking for which is checked
           // also clear the class "selected" from the label and add it to the checked one
             for ( j = 0; j < unique_group.length; j++ ) {
-                if ( unique_group[j].checked ) {
-                    variant[unique[i]] = unique_group[j].value;
-                }
+
+              // if the radio button is not checked, remove the class "selected" from the corresponding label
+              if ( !unique_group[j].checked ) {
+                const u_id = unique_group[j].id;
+                const u_label = document.querySelector(label[for="' + u_id'"]);
+              }
+              else {
+                  variant[unique[i]] = unique_group[j].value;
+              }
             }
         }
         
