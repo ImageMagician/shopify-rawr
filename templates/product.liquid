@@ -111,7 +111,7 @@
     /*
      *  Variant pricing switch
      */
-  let i;
+  let i, j;
   
     // get the contents of the 'project_variants' json list and parse for javascript
     const data = document.getElementById('product_variants').innerHTML;
@@ -124,7 +124,7 @@
     const radios = document.querySelectorAll('.shopify-product-form input[type="radio"]');
     const labels = document.querySelectorAll('.shopify-product-form label');
 
-    for ( let i = 0; i < radios.length; i++ ) {
+    for ( i = 0; i < radios.length; i++ ) {
         // add event listener by 'change'
         radios[i].addEventListener('change', radioChecked);
       if ( radios[i].checked ) {
@@ -147,14 +147,14 @@
         let variant = [];
         
         // cycle through each radio button group and get the selected item's value
-        for ( let i = 0; i < unique.length; i++ ) {
+        for ( i = 0; i < unique.length; i++ ) {
           
           // get the unique group of buttons
             const unique_group = document.querySelectorAll('input[name="' + unique[i] + '"]');
 
           // cycle through looking for which is checked
           // also clear the class "selected" from the label and add it to the checked one
-            for ( let j = 0; j < unique_group.length; j++ ) {
+            for ( j = 0; j < unique_group.length; j++ ) {
                 if ( unique_group[j].checked ) {
                   console.log( variant[i] + ' : ' + unique_group[j].value);
                     variant[unique[i]] = unique_group[j].value;
