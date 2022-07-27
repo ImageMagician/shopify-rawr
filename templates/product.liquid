@@ -157,8 +157,8 @@
         for ( i = 0; i<parse.length; i++ ) {
             if (variant[unique[0]] == parse[i].option1 && variant[unique[1]] == parse[i].option2 && variant[unique[2]] == parse[i].option3) {
               
-                // change the hidden input for the purchase id
-                document.getElementById('purchase').value= parse[i].id;
+                // change the hidden input for the 'product-select' id
+                document.getElementById('product-select').value= parse[i].id;
               
                 // change the URL to include variant param
                 const pushThis = '?variant=' + parse[i].id;
