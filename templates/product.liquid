@@ -143,7 +143,8 @@
       
       // remove default attribute "checked" from loaded radio buttons
       for (i = 0; i < radios.length; i++ ) {
-        radio[i].setAttribute('checked','');
+        radios[i].setAttribute('checked','');
+        labels[i].classList.remove('selected');
       }
       
         // variant will hold all the selected radio button items from each unique group
