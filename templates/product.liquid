@@ -126,6 +126,9 @@
     for ( let i = 0; i < radios.length; i++ ) {
         // add event listener by 'change'
         radios[i].addEventListener('change', radioChecked);
+      if ( radios[i].checked ) {
+        labels[i].classList.add('selected');
+      }
       
         // get all unique radio group names
         if ( !i || radios[i-1].getAttribute('name') != radios[i].getAttribute('name')) {
