@@ -161,11 +161,13 @@
             for ( j = 0; j < unique_group.length; j++ ) {
 
               // if the radio button is not checked, remove the class "selected" from the corresponding label
+              // if it is, add it
               if ( !unique_group[j].checked ) {
                 document.querySelector('label[for="' + unique_group[j].id + '"]').classList.remove('selected');
               }
               else {
-                  variant[unique[i]] = unique_group[j].value;
+                variant[unique[i]] = unique_group[j].value;
+                document.querySelector('label[for="' + unique_group[j].id + '"]').classList.add('selected');
               }
             }
         }
