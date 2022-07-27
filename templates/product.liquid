@@ -173,8 +173,14 @@
         }
         
         // check each variant from the json list and see which one matches all the radio button values
-        for ( i = 0; i<parse.length; i++ ) {
+        for ( i = 0; i < parse.length; i++ ) {
             if (variant[unique[0]] == parse[i].option1 && variant[unique[1]] == parse[i].option2 && variant[unique[2]] == parse[i].option3) {
+
+                // change the displayed price
+                  // format the price from the json list
+                  const display_price = parse[i].price / 100;
+              
+                document.getElementById('product_price_display').innerHTML = 
               
                 // change the hidden input for the 'product-select' id
                 document.getElementById('product-select').value= parse[i].id;
