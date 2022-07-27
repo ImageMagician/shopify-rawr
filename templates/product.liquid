@@ -139,8 +139,9 @@
         for ( let i = 0; i < unique.length; i++ ) {
             const unique_group = document.querySelectorAll('input[name="' + unique[i] + '"]');
             for ( let j = 0; j < unique_group.length; j++ ) {
-              console.log(unique_group[j]);
+//              console.log(unique_group[j]);
                 if ( unique_group[j].checked ) {
+                  console.log( variant[unique[i]] + ' : ' + unique_group[j].value);
                     variant[unique[i]] = unique_group[j].value;
                 }
             }
@@ -151,11 +152,14 @@
         // check each variant from the json list and see which one matches all the radio button values
         for ( i = 0; i<parse.length; i++ ) {
             if (variant[unique[0]] == parse[i].option1 && variant[unique[1]] == parse[i].option2 && variant[unique[2]] == parse[i].option3) {
+              
                 // change the hidden input for the purchase id
                 document.getElementById('purchase').value= parse[i].id;
+              
                 // change the URL to include variant param
                 const pushThis = '?variant=' + parse[i].id;
                 window.history.pushState('','', pushThis);
+              
                 break;
             }
         }
