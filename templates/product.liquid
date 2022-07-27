@@ -273,12 +273,16 @@ document.write('</span>');
 
 <style>
   .shopify-product-form fieldset label {
-    border: 1px solid black;
-    padding: 8px 16px;
-    margin: 0 8px 8px 0;
-    border-radius: 5px;
-    font-size: .875em;
-}
+      border: 1px solid #313438;
+      padding: 8px 16px;
+      margin: 0 8px 8px 0;
+      border-radius: 5px;
+      font-size: .875em;
+  }
+  
+  .shopify-product-form fieldset label:hover {
+    background:#f0f1f4;
+  }
 </style>
 
 <!--Start Stamped.io Auto Installation--><div id="stamped-main-widget" class="stamped-main-widget" data-widget-style="standard" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}" data-widget-language="{{shop.locale}}">{{ product.metafields.stamped.reviews }}</div><!--End Stamped.io Auto Installation-->
