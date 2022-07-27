@@ -143,7 +143,7 @@
         for ( let i = 0; i < unique.length; i++ ) {
             const unique_group = document.querySelectorAll('input[name="' + unique[i] + '"]');
             for ( let j = 0; j < unique_group.length; j++ ) {
-//              console.log(unique_group[j]);
+              console.log('unique group: ') + unique_group[j]);
                 if ( unique_group[j].checked ) {
                   console.log( variant[unique[i]] + ' : ' + unique_group[j].value);
                     variant[unique[i]] = unique_group[j].value;
