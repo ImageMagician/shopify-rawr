@@ -173,7 +173,7 @@
                 // change the displayed price
                 
                 // format the price from the json list
-                const display_price = parseFloat(parse[i].price / 100, 2);
+                const display_price = (parse[i].price / 100).toFixed(2);
               
                 document.getElementById('product_price_display').innerHTML = '$' + display_price;
               
