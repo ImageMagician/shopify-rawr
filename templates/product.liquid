@@ -124,11 +124,14 @@
     for ( let i = 0; i < radios.length; i++ ) {
         // add event listener by 'change'
         radios[i].addEventListener('change', radioChecked);
+      
         // get all unique radio group names
         if ( !i || radios[i-1].getAttribute('name') != radios[i].getAttribute('name')) {
             unique.push(radios[i].getAttribute('name'));
         }
     }
+
+    console.log(unique);
     
     // run when a radio button is selected
     function radioChecked() {
