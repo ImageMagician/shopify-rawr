@@ -162,8 +162,7 @@
 
               // if the radio button is not checked, remove the class "selected" from the corresponding label
               if ( !unique_group[j].checked ) {
-                const u_id = unique_group[j].id;
-                const u_label = document.querySelector(label[for="' + u_id'"]);
+                document.querySelector('label[for="' + unique_group[j].id + '"]').classList.remove('selected');
               }
               else {
                   variant[unique[i]] = unique_group[j].value;
