@@ -180,7 +180,7 @@
                   // format the price from the json list
                   const display_price = parse[i].price / 100;
               
-                document.getElementById('product_price_display').innerHTML = 
+                document.getElementById('product_price_display').innerHTML = '$' + display_price;
               
                 // change the hidden input for the 'product-select' id
                 document.getElementById('product-select').value= parse[i].id;
