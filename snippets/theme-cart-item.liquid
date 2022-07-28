@@ -12,6 +12,7 @@
                     {%- if item.product.has_only_default_variant -%}
                       {{ item.product.title }}
                     {%- else -%}
+                      <h4>{{ item.product.title | escape }}</h4>
                       {{ item.variant.title }}
                     {%- endif -%}
                   </a>
