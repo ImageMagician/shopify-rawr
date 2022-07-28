@@ -11,7 +11,7 @@
     <div class="col-lg-5">
         <h1>{{ product.title }}</h1>
         {% assign current_variant = product.selected_or_first_available_variant %}
-        <div class="variant-sku">{{ current_variant.sku }}</div>
+        <div id="variant_sku" class="variant-sku">{{ current_variant.sku }}</div>
         <!-- span class="stamped-product-reviews-badge stamped-main-badge" 
           data-id="{{product.id}}" 
           data-product-title="{{product.title}}" 
