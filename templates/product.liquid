@@ -181,6 +181,7 @@
               
                 // change the hidden input for the 'product-select' id
                 document.getElementById('product-select').value= parse[i].id;
+                document.getElementById('variant_sku').innerHTML = parse[i].sku;
               
                 // change the URL to include variant param
                 const pushThis = '?variant=' + parse[i].id;
