@@ -10,7 +10,8 @@
     </div>
     <div class="col-lg-5">
         <h1>{{ product.title }}</h1>
-        <div style="font-size:.875em; color:#999" class="variant-sku">{{ product.sku }}</div>
+        {% assign current_variant = product.selected_or_first_available_variant %}
+        <div class="variant-sku">{{ current_variant.sku }}</div>
         <!-- span class="stamped-product-reviews-badge stamped-main-badge" 
           data-id="{{product.id}}" 
           data-product-title="{{product.title}}" 
