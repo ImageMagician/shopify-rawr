@@ -10,11 +10,12 @@
     </div>
     <div class="col-lg-5">
         <h1>{{ product.title }}</h1>
-        <span class="stamped-product-reviews-badge stamped-main-badge" 
+        <div style="font-size:.875em; color:#999" class="variant-sku">{{ current_variant.sku }}</div>
+        <!-- span class="stamped-product-reviews-badge stamped-main-badge" 
           data-id="{{product.id}}" 
           data-product-title="{{product.title}}" 
           data-product-type="{{product.type}}" 
-          style="display: block;"></span>
+          style="display: block;"></span -->
             
         <div class="mb-3">
             {% unless product.metafields.lionenergy.tagline == blank %}
